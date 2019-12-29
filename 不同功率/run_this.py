@@ -1,13 +1,12 @@
-from 相同功率.maze_env import Maze
-from 相同功率.RL_brain import DeepQNetwork
+from 不同功率.maze_env import Maze
+from 不同功率.RL_brain import DeepQNetwork
 import matplotlib.pyplot as plt
 
 
 def run_maze():
-    # E = []
     observation = [[0]]
     reward_ = []
-    for step in range(10000):
+    for step in range(200000):
         # e = 0
         ########################更改
         # for step in range(5):
@@ -22,7 +21,6 @@ def run_maze():
         # 传出能量消耗
         # 传入步数和动作和当前状态
         # 　每20步换一次信道
-
         if step % 20 == 0:
             g = env.Channel_Generate()
         observation_, reward = env.state(action, g)
@@ -40,6 +38,7 @@ def run_maze():
         # print("第", episode, '回合的第', step+1, '步')
     #     E.append(e)
     # print(E)
+        print('第', step, '步')
     plt.plot(reward_)
     plt.show()
 

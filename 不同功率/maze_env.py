@@ -17,7 +17,7 @@ import numpy as np
 
 class Maze(object):
     def __init__(self):
-        self.action_space = [0, 1, 2, 3]
+        self.action_space = [i for i in range(27)]
         print(self.action_space)
         # 构建动作空间
         self.n_actions = len(self.action_space)
@@ -35,22 +35,26 @@ class Maze(object):
 
     # def state(self, action, p0, g0):
     def state(self, action, gh):
-        if action == 0:
-            state = 0
-            p = 1000
-        elif action == 1:
-            state = 1
-            p = 2000
-        elif action == 2:
-            state = 2
-            p = 3000
-        elif action == 3:
-            state = 3
-            p = 4000
-        R = 0
+        state_init = []
+        state = 3 * [0]
         for i in range(3):
-            R = R + 12.5 * 10 ** 3 * math.log((1 + (p * gh[i]) / (10 ** -13)), 2)
-        # 计算传输的功率,速度
-        reward = 3 * p * (0.5 * 1.5 * 10 ** 3 / R)
+            for j in range(3):
+                for k in range(3):
+                    state_init.append([i, j, k])
+                    # 建立状态二维数组
+        for i in range(3):
+            if state_init[action][i] == 0:
+                state[i] = 1000
+            elif state_init[action][i] == 1:
+                state[i] = 2000
+            elif state_init[action][i] == 2:
+                state[i] = 3000
+        R = 0
+        reward = 0
+        for i in range(3):
+            R = R + 12.5 * 10 ** 3 * math.log((1 + (state[i] * gh[i]) / (10 ** -13)), 2)
+        for i in range(3):
+            reward = reward + state[i] * (0.5 * 1.5 * 10 ** 3 / R)
         print("功耗为：", reward)
-        return state, -reward
+        print("选择的功率为", state)
+        return action, -reward
