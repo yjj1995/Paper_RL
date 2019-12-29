@@ -1,0 +1,299 @@
+\documentclass[journal]{IEEEtran}
+\usepackage{float}
+\usepackage{bbm}
+\usepackage{footmisc}
+\newenvironment{figurehere}
+{\def\@captype{figure}}{}
+\usepackage{multirow}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{tabularx}
+  \usepackage{epstopdf}
+%\usepackage{cite}
+\usepackage{amsmath}
+\usepackage{stfloats}
+\usepackage{footmisc} 
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithmicx,algorithm}
+\usepackage[style=ieee,citestyle=ieee]{biblatex}
+\addbibresource{mec.bib}
+\usepackage{color}
+\newcommand{\red}[1]{{\textcolor[rgb]{1,0,0}{#1}}}
+\newcommand{\blue}[1]{{\textcolor[rgb]{0,0,1}{#1}}}
+\newcommand{\JL}[1]{\blue{[JL: {#1}]}}
+%\usepackage{extarrows}
+\def\proof{\par\noindent{\em Proof.}}
+\def\endproof{\hfill $\Box$ \vskip 0.4cm}
+\newcommand{\bj}{\mbox{$\boldsymbol{j}$}}
+\newcommand{\hs}{\hat{s}}
+\newcommand{\Tr}{\textnormal{Tr}}
+\newcommand{\ex}{{\bf\sf E}}
+\newcommand{\HH}{\dagger}
+\newcommand{\re}{\textnormal{Re}\,}
+\newcommand{\im}{\textnormal{Im}\,}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{lemma}{Lemma}
+\newtheorem{remark}{Remark}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\renewcommand{\IEEEQED}{\IEEEQEDopen}
+\makeatletter
+\newcommand{\rmnum}[1]{\romannumeral #1}
+\newcommand{\Rmnum}[1]{\expandafter\@slowromancap\romannumeral #1@}
+\IEEEoverridecommandlockouts
+\title{\huge{Joint Offloading and Resource Allocation for Time-Sensitive Multi-Access Edge Computing Network}}
+\author{\IEEEauthorblockN{Jun-Jie Yu$^{\dagger}$, Mingxiong Zhao$^{\dagger,\star}$, Wen-Tao Li$^{\dagger}$, Di Liu$^{\dagger}$, Shaowen Yao$^{\dagger}$, and Wei Feng$^{*}$}\\
+\IEEEauthorblockA{$^{\HH}$National Pilot School of Software, Yunnan University, Kunming, China\\
+$^{*}${School of Communication Engineering, Hangzhou Dianzi University, Hangzhou, China}\\
+Email: mx\_zhao@ynu.edu.cn}\vspace{-2em}
+\thanks{This work is supported in part by the National Natural Science Foundation of China under Grant 61801418 and 61902341, in part by Yunnan Applied Basic Research Projects 2019FD-12, in part by the Open Foundation of Key Laboratory in Software Engineering of Yunnan Province under Grant 2017SE203.}
+\thanks{$^\star$ M. Zhao is the corresponding author.}}
+\begin{document}
+\maketitle
+\input{abstract/abstract.tex}
+\begin{IEEEkeywords}
+Multi-access edge computing (MEC), resource allocation, orthogonal frequency-division multiple access (OFDMA), time-sensitive.
+\end{IEEEkeywords}
+\section{Introduction}
+\input{intro/intro.tex}
+\section{System model and problem formulation}
+We consider an OFDMA-based MEC system with $K$ users and one base-station (BS) integrated with an MEC server to execute the offloaded data of users, and all nodes are equipped with a single antenna. Denote $\mathcal{K} \triangleq \{1,2, \cdots, K\}$ as the set of users, and let  $\mathcal{N}\triangleq \{1,2, \cdots, N\}$ be the index for multiple orthogonal subcarriers, each of which has bandwidth $B$ and can be assigned to only one user. In this system, we assume that user $k$ has a task described by a tuple of four parameters $\{R_k, c_k, \lambda_k, t_k\}$, where $R_{k}$ indicates the amount of input data to be processed, $c_{k}$ reprsesents the number of CPU cycles for computing 1-bit of input data, $\lambda_k\in[0,1]$ is the proportion of $R_k$ offloading to MEC, while the rest $(1-\lambda_k)R_k$ bits are processed by its local CPU, and $t_k$ is the maximum tolerable latency. In this paper, it is assumed that the maximum tolerable latency for user $k$, $t_k$ is no longer than the channel coherence time, such that the wireless channels remain constant during a time slot with length $T$, i.e., $t_k\leq T, \forall k$, but can vary from time to time. The local CPU frequency of user $k$ is characterized by $f_k$, and $f_{k,m}$ is the computational speed of the edge cloud assigned to user $k$, where both of them are measured by the number of CPU cycles per second. Herein, a practical constraint that the total computing resources allocated to all the associated users must not excess the server’s computing capacity $F$, is given by $\sum_{k\in\mathcal{K}}f_{k,m}\leq F$.
+%%%%%%%%%%%%%%%插入图片
+
+In the following, the time latency and the energy consumption of user $k$ for our considered system are given in details.
+\subsection{Time Latency}
+\subsubsection{Local Computing at Users} 
+Consider the local computing for executing the residual $(1-\lambda_k)R_k$ input bits  at user $k$, the time consumption for local computing at user $k$ is
+\begin{equation}\label{local time}
+t_{k,l} =\frac{c_{k}\left(1-\lambda_{k}\right)R_{k}}{f_{k}}.
+\end{equation}
+\subsubsection{Computation Offloading} 
+According to the OFDMA mechanism, the inter-interference is ignored in virtue of the exclusive subcarrier allocation. Therefore, the aggregated transmission rate to offload $\lambda_kR_k$ input bits from user $k$ to MEC server is expressed as
+\begin{equation}\label{r_k}
+    r_k =B\sum_{n\in\mathcal{N}}x_{k,n}\log_2\left(1+\frac{p_{k}g_{k,n}}{\sigma_n^2}\right),
+\end{equation}
+where $g_{k,n}$ and $\sigma_n^2$ are the channel gain between user $k$ and BS, and the variance of the additive white Gaussian noise at BS on subcarrier $n$, respectively, where we set $\sigma_n^2=\sigma^2, \forall n$. Denote $p_{k}$ as the transmission power, which can be allocated by the user and constrained by the maximum transmission power $p_k^\text{max}$. Apparently, any power optimization solution has a good influence on the system performance. For the sake of simplicity, $p_k$ remains at a random level, which is a common assumption \cite{Yang2019Access,wenJoint}\footnote{The further research about the power allocation among each subcarrier will be investigated in our future work.}. Meanwhile, denote $x_{k,n}$ as the channel allocation indicator, specifically $x_{k,n}=1$ means that subcarrier $n$ is assigned to user $k$, otherwise $x_{k,n}=0$.
+
+The offloading time $t_{k,\text{off}}$ of user $k$ mainly consists of two parts\footnote{In practice, the MEC-integrated BS will provide sufficient transmit power, while the amount of output data from MEC server to user $k$ is usually much less than that of the input data, the time consumed and the transmission energy for delivering the computed results are negligible \cite{Hu2018Wireless}.\label{footnote1}}: the uplink transmission time $t_{k,u}$ from user $k$ to MEC server and the corresponding execution time at MEC server $t_{k,m}$. Therefore, the offloading time $t_{k,\text{off}}$ is given by 
+\begin{equation}\label{t_off}
+t_{k,\text{off}}=t_{k,u}+t_{k,m}=\frac{\lambda_{k}R_{k}}{r_{k}}+\frac{\lambda_{k}R_{k}c_{k}}{f_{k,m}}.
+\end{equation}
+
+Due to the parallel computing at users and MEC server, the total time latency for user $k$ depends on the the larger one between $t_{k,l}$ and $t_{k,\text{off}}$, and can be expressed as
+\begin{equation}
+t_k = \max \{t_{k,l}, t_{k,\text{off}}\}.
+\end{equation}
+\subsection{Energy Consumption}
+According to the strategy of computation offloading at user $k$, the total energy consumption comprises two parts\footref{footnote1}: the energy for local computing and for offloading, given in details as follow. 
+\subsubsection{Local Computing mode}
+Given the processor's computing speed $f_k$, the power consumption of the processor is modeled as $\kappa_kf_k^3$ (joule per second), where $\kappa_k$ represents the computation energy efficiency coefficient related to the processor's chip of user $k$ \cite{Zhang2013Energy,Wang2016Mobile,Bi2018Computation}. Taking consideration of \eqref{local time}, the energy consumption at this mode is given by
+\begin{equation}
+E_{k,l}=\kappa_kf_k^3t_{k,l}=\kappa_kc_k\left(1-\lambda_k\right) R_kf_k^2. 
+\end{equation}
+\subsubsection{Computation offloading mode}
+In this mode, the energy consumption includes the cost of uplink transmitting and remote computing for offloaded $\lambda_kR_k$ input bits, which can be obtained as
+\begin{equation}\label{e_u,m}
+ E_{k,\text{off}}=E_{k,u}+E_{k,m}= p_{k}\frac{\lambda_kR_k}{r_k}+\kappa_m\lambda_kc_kR_kf_{k,m}^2,
+\end{equation}
+where $\kappa_m$ is the computation energy efficiency coefficient related to the processor's chip of MEC server.
+
+Therefore, the total energy consumption for user $k$ related with its computation offloading strategy in our system is
+\begin{equation}
+ E_k = E_{k,l}+E_{k,u}+E_{k,m}.
+\end{equation}
+
+In this paper, we minimize the overall energy consumption of the considered system, which is related to resource allocation on subcarriers, offloading communication and computation. Mathematically, the energy consumption minimization problem can be written as 
+\begin{subequations}\label{OP1}
+\begin{align}
+\mathbf{P1}:~\min _{\boldsymbol{\lambda},\boldsymbol{f},\boldsymbol{X}}~&\sum_{k\in\mathcal{K}}E_{k}\\
+\mathrm{s.t.}  ~& 0\leq \lambda_{k}\leq 1,\forall k, \label{OP1-C1}\\
+~&  \max \{t_{k,l}, t_{k,\text{off}}\} \leq T,\forall k,\label{OP1-C2}\\
+~&  0 \leq f_{k,m}, \forall k,\label{OP1-C3}\\
+~& \sum_{k\in\mathcal{K}}f_{k,m}\leq F,\label{OP1-C4}\\
+~& \sum_{k\in\mathcal{K}}x_{k, n} \leq 1, \forall n,\label{OP1-C5}\\
+~&  x_{k, n} \in\{0,1\},\forall k, n,\label{OP1-C6}
+\end{align}
+\end{subequations}
+where $\boldsymbol{\lambda}\triangleq\{\lambda_{k}\}$, $\boldsymbol{f}\triangleq\{f_{k,m}\}$ and $\boldsymbol{X}\triangleq\left\{x_{k,n}\right\}$. The constraints above can be explained as follows: constraint \eqref{OP1-C2} states that the task of user $k$ must be completely executed within a time slot; constraint \eqref{OP1-C3} and \eqref{OP1-C4} show that MEC server must allocate a positive computing resource to the user associated with it, and the sum of which cannot exceed the total computational capability of MEC server; constraint \eqref{OP1-C5} and \eqref{OP1-C6} enforce that each subcarrier can only be used by one user to avoid the multi-user interference.
+\section{Offloading and Resource Allocation Strategy}
+The main challenge in solving $\mathbf{P1}$ is that the considered optimization problem is a mixed integer programming and thus is NP-hard and non-convex, finding the optimal solution is generally prohibitively due to the complexity. However, the duality gap becomes zero in multi-carrier systems as the number of subcarriers goes to infinity according to the time-sharing condition \cite{Seong2006Optimal,Wei2006Dual}. Thus, the optimal solution for a non-convex resource allocation problem in multi-carrier system can be achieved in the dual domain. 
+
+However, it is still intractable to deal with \eqref{OP-DF} due to the coupled variants based on our observation. To decouple these variants, we can firstly optimize $(\boldsymbol{f}, \boldsymbol{X})$ and update dual variables $(\boldsymbol\alpha,\boldsymbol\beta,\gamma)$ with fixed $\boldsymbol{\lambda}$ at one iteration, then obtain the optimal $\boldsymbol\lambda$ at the next iteration, which is known as the block coordinate descent (BCD) method \cite{Richt2014Iteration}. In this section, the joint offloading and resource allocation strategy will be proposed in accordance with the iterative approach based on the BCD method as follows.
+\subsection{Resource allocation strategy}\label{3A}
+In this subsection, the resource allocation strategy will be designed to assign the computational capabilities of MEC server, and allocate the subcarriers for each user. Define $\mathcal{F}$ as all sets of possible $\boldsymbol{f}$ that satisfy constraint \eqref{OP1-C3} and $\mathcal{X}$ as all sets of possible $\boldsymbol{X}$ that satisfy constraints \eqref{OP1-C5} and \eqref{OP1-C6}. Therefore, the Lagrangian function for $\mathbf{P1}$ with given $\boldsymbol\lambda$ can be formulated as 
+\begin{equation}\label{OP-L}
+\begin{aligned}
+&\!\mathcal{L}(\boldsymbol{f},\boldsymbol{X},\boldsymbol\alpha,\boldsymbol\beta,\gamma)\!=\!\!\sum_{k\in\mathcal{K}} \!E_k\!+\!\!\sum_{k\in\mathcal{K}}\alpha_{k}\!\left[\frac{(1\!-\!\lambda_{k})R_{k}c_{k}}{f_{k}}\!-\!T\right]\\
+&\!\!+\!\sum_{k\in\mathcal{K}}\!\beta_{k}\!\left(\frac{\lambda_{k}R_{k}}{r_{k}}\!+\!\frac{\lambda_{k}R_{k}c_{k}}{f_{k,m}}\!-\!T\right)\!\!+\!\gamma\!\left(\sum_{k\in\mathcal{K}}f_{k,m}\!-\!F\right)\!,
+\end{aligned}    
+\end{equation}
+where $\boldsymbol\alpha = \left[\alpha_{1},\alpha_{2},\cdots\alpha_{k}\right]^T$, $\boldsymbol\beta = \left[\beta_{1},\beta_{2},\cdots\beta_{k}\right]^T$ and $\gamma$ are the non-negative Lagrange multipliers. The dual function is then defined as
+\begin{equation}\label{OP-DF}
+\begin{aligned}
+g(\boldsymbol\alpha,\boldsymbol \beta,\gamma) = \min_{\boldsymbol{f}\in\mathcal{F},\boldsymbol{X}\in \mathcal{X}}\mathcal{L}(\boldsymbol{f},\boldsymbol{X},\boldsymbol\alpha,\boldsymbol\beta,\gamma).
+\end{aligned}    
+\end{equation}
+
+Furthermore, the dual problem is given by
+\begin{equation}\label{OP-DP}
+\begin{aligned}
+\max ~&g(\boldsymbol\alpha,\boldsymbol\beta,\gamma)\\
+\mathrm{s.t.} ~&\boldsymbol{\alpha}\succeq \boldsymbol{0},~\boldsymbol{\beta}\succeq \boldsymbol{0},~\gamma \geq 0.
+\end{aligned}    
+\end{equation}
+
+To obtain the optimal solutions for both computing resource and subcarrier allocation for the given offloading ratio, the following steps for updating is adopted. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{Computational capabilities assignment}
+Employing the Karush-Kuhn-Tucker (KKT) conditions, the following condition is both necessary and  sufficient for computational capabilities assignment's optimality:
+%按照正确的求导来做
+\begin{equation}{\label{op-f}}
+\begin{aligned}
+\frac{\partial\mathcal{L}(\boldsymbol{X},\boldsymbol{f},\boldsymbol\alpha,\boldsymbol\beta,\gamma)}{\partial{f_{k,m}}}\!=\! 2f_{k,m}\kappa_m\lambda_{k}R_{k}c_{k}
+\!-\!\frac{\beta_{k}c_{k}R_{k}\lambda_{k}}{f_{k,m}^2}\!+\!\gamma\! =\! 0.
+\end{aligned}
+\end{equation}
+
+However, it is difficult to find a closed-form expression for the optimal solution, $f_{k,m}^\star$. Fortunately, since $\mathcal{L}$ is a convex function of $f_{k,m}$\footnote{The \emph{Hessian} of $\mathcal{L}$ in \eqref{OP-L} with respect to $f_{k,m}$ is non-negative, thus $\mathcal{L}$ is a convex function of $f_{k,m}$\cite{boyd2004convex}.}, and $\frac{\partial\mathcal{L}}{\partial{f_{k,m}}}$ increases monotonically along with $f_{k,m}$, we can adopt the bisection method to obtain $f_{k,m}^\star$ within $0\leq f_{k,m}\leq F$. The detailed process of achieving $f_{k,m}$ is summarized in Algorithm 1.
+\input{Algorithm1/A1.tex}
+\subsubsection{Subcarrier allocation strategy}
+%%%%%%%%%%%%%%%%%%%%%求解最优的X
+When the optimal computing capabilities assignment is achieved, the optimal subcarrier allocation can be obtained according to the following procedures. 
+
+With some mathematic manipulations, we rewrite \eqref{OP-L} as
+\begin{equation}\label{OP-L1}
+\begin{aligned}
+& \mathcal{L}(\boldsymbol{X},\boldsymbol{f},\boldsymbol\alpha,\boldsymbol\beta,\gamma) =\mathcal{L}^\text{sub}(\boldsymbol{X},\boldsymbol\beta)-\gamma F+\\
+&\sum_{k\in\mathcal{K}}\left\{\vphantom{\frac{\lambda_{k}R_{k}c_{k}}{f_{k,m}}}\kappa_kc_{k}(1-\lambda_{k})R_kf_{k}^{2}+\kappa_{m}\lambda_{k}R_{k}f_{k,m}^{2}+\gamma f_{k,m}+\right.\\
+&\left.\alpha_{k}\left[\frac{(1-\lambda_{k})R_{k}c_{k}}{f_{k}}-T\right]+\beta_{k}\left(\frac{\lambda_{k}R_{k}c_{k}}{f_{k,m}}-T\right)\right\},
+\end{aligned}    
+\end{equation}
+where 
+\begin{equation}\label{OP-L2}
+\begin{aligned}
+\mathcal{L}^\text{sub}(\boldsymbol{X},\boldsymbol\beta) =
+\sum_{k\in\mathcal{K}}\left(p_{k}\frac{\lambda_{k}R_{k}}{r_{k}}+\beta_{k}\frac{\lambda_{k}R_{k}}{r_{k}}\right).
+\end{aligned}    
+\end{equation}
+Once the optimal computing resource $\boldsymbol{f^\star}$ and offloading ratio $\boldsymbol{\lambda}$ are given, the energy consumption for remote computing at MEC and local computation at users becomes constant referring to \eqref{OP-L1}. Therefore, to further minimize the total energy consumption is to reduce the energy consumed by uplink transmission of users with the help of proper subcarrier allocation, and \eqref{OP-DF} can be rewritten as 
+\begin{equation}\label{OP-L3}
+    \min_{\boldsymbol{X}\in \mathcal{X}}~\mathcal{L}^\text{sub}(\boldsymbol{X},\boldsymbol\beta),
+\end{equation}
+which cannot be decoupled into $N$ subproblems and tackled in parallel with respect to (w.r.t.) each subcarrier. 
+\begin{proposition}
+Problem \eqref{OP-L3} can be equivalently recast as 
+\begin{equation}\label{OP-L3a}
+\begin{aligned}
+\max_{\boldsymbol{X}\in \mathcal{X}}\mathcal{L}^{\frac{1}{\text{sub}}}(\boldsymbol{X},\boldsymbol\beta),
+\end{aligned} 
+\end{equation}
+where 
+\begin{equation}\label{OP-L3A}
+\begin{aligned}
+\mathcal{L}^{\frac{1}{\text{sub}}}(\boldsymbol{X},\boldsymbol\beta) \!\!=\!\!
+\sum_{k\in\mathcal{K}}\left[\frac{B\sum_{n\in\mathcal{N}}x_{k,n}\log_2\left(1+\frac{p_{k}g_{k,n}}{\sigma_n^2}\right)}{(p_{k}+\beta_{k})\lambda_{k}R_{k}}\right].
+\end{aligned} 
+\end{equation}
+\end{proposition}
+\begin{proof}
+Please refer to Appendix A.
+\end{proof}
+Suppose that subcarrier $n$ is assigned to user $k$, we have 
+\begin{equation}
+\begin{aligned}
+\mathcal{L}^{\frac{1}{\text{sub}}} = \sum_{n\in\mathcal{N}}\mathcal{L}_{n},
+\end{aligned}
+\end{equation}
+where 
+\begin{equation}
+\begin{aligned}
+\mathcal{L}_{n} = B\log_2\left(1+\frac{p_{k}g_{k,n}}{\sigma_n^2}\right)\left[\frac{1}{(p_{k}+\beta_{k})\lambda_{k}R_{k}}\right].
+\end{aligned}
+\end{equation}
+Thus, the subproblem is given by
+\begin{equation}
+\begin{aligned}
+\max_{\boldsymbol{X}_{n}\in\mathcal{X}}\mathcal{L}_{n}(\boldsymbol{X}_{n},\boldsymbol\beta) 
+\end{aligned}
+\end{equation}
+where $\boldsymbol X_{n}=\left\{x_{k, n}\right\}_{k=1}^{K}$, and this problem can be solved independently.
+By maximizing each $\mathcal{L}_{n}$, the optimal $\boldsymbol X$
+can be obtained as
+\begin{equation}{\label{op-x}}
+x_{k,n}^\star=\left\{\begin{array}{l}{1,~\text {if}~k=k^\star=\operatorname{argmax}_{k}~\mathcal{L}_{n}} \\ {0,
+~\text{otherwise}.}\end{array}\right.
+\end{equation}
+\subsubsection{Lagrange Multipliers Update} In this subsection, since $\boldsymbol{f^\star}$ and $\boldsymbol{X^\star}$ are obtained, we can deal with the dual problem \eqref{OP-DP}, which is a convex function, by updating $\boldsymbol{\alpha}$, $\boldsymbol{\beta}$ and $\gamma$ using the subgradient method.
+The dual variables $(\boldsymbol\alpha,\boldsymbol\beta,\gamma)$ can be updated according to the following formulations,
+\begin{equation}\label{op-u}
+\begin{aligned}
+&\alpha_{k}^{z+1}=\left\{\alpha_{k}^{z}-\zeta_{k}\left[ \frac{(1-\lambda_{k})R_{k}c_{k}}{f_{k}}-T\right]\right\}^{+},\\
+&\beta_{k}^{z+1}=\left[\beta_{k}^{z}-\eta_{k}\left(\frac{\lambda_{k}R_{k}}{r_{k}}+\frac{\lambda_{k}R_{k}c_{k}}{f_{k,m}}-T \right)\right]^{+},\\
+&\gamma^{z+1}=\left[\gamma^{z}-\theta\left(\sum_{k\in\mathcal{K}}f_{k,m} - F\right)\right]^{+},
+\end{aligned}
+\end{equation}
+where $[x]^{+} = \max\{0,x\}$, meanwhile $\zeta_k$, $\eta_k$ and $\theta$ are the stepsizes related to each dual variable during iterations, the details of which are given in TABLE 1.
+%%%%%%%%%%%%%%%%%%%%%%%%%第二层算法
+\subsection{Offloading strategy}\label{3B}
+Given offloading ratio, the computational capabilities assignment and the subcarrier allocation strategy are achieved as described in Subsection \ref{3A}. In this part, the optimal offloading ratio $\boldsymbol{\lambda}^\star$ can be obtained by solving the following problem with the achieved $\boldsymbol{f}^\star$ and $\boldsymbol{X}^\star$,
+\begin{equation}\label{OP1l}
+\begin{aligned}
+\mathbf{P2}:~\min _{\boldsymbol{\lambda}}~&\sum_{k\in\mathcal{K}}E_{k}\\
+\mathrm{s.t.}  ~&\eqref{OP1-C1}\eqref{OP1-C2},
+\end{aligned}
+\end{equation}
+which can be decoupled into $K$ subproblems for each user, given by
+\begin{subequations}\label{OP1lA}
+\begin{align}
+\mathbf{P3}:~\min _{\lambda_{k}}~&E_{k}\\
+\mathrm{s.t.}  ~& 0\leq \lambda_{k}\leq 1,\label{OP1lA-C1}\\
+~&  1-\frac{Tf_{k}}{c_{k}R_{k}} \leq \lambda_{k} \leq \frac{Tr_{k}f_{k,m}}{R_{k}f_{k,m}+r_{k}R_{k}c_{k}},\label{OP1lA-C2}
+\end{align}
+\end{subequations}
+where \eqref{OP1lA-C2} can be achieved with the help of \eqref{local time} and \eqref{t_off}. Apparently, $\mathbf{P3}$ is a convex problem, and the optimal ratio at user $k$ is given by\footnote{The value of $E_{k}$ is independent of $\lambda_{k}$ when $\frac{\partial E_{k}}{\partial \lambda_{k}}=0$, thus we can choose any offloading ratio as the optimal ratio.}
+\begin{equation}{\label{OP-lkm}}
+ \lambda_{k}^\star= 
+\left\{
+\begin{aligned}
+&\max\left\{1-\frac{Tf_{k}}{c_{k}R_{k}},0\right\},    &\frac{\partial E_{k}}{\partial \lambda_{k}} \geq 0,\\
+&\min \left\{\frac{Tr_{k}f_{k,m}}{R_{k}f_{k,m}+r_{k}R_{k}c_{k}},1\right\},  &\frac{\partial E_{k}}{\partial \lambda_{k}}< 0.
+\end{aligned}
+\right.
+\end{equation}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%算法流程
+
+According to \ref{3A} and \ref{3B}, the details to solve P1 are summarized in Algorithm 2 as follows.
+\input{Algorithm1/A2.tex}
+%\end{itemize}
+%\input{proposition/min_time.tex}
+
+
+
+\input{NUMERICAL/NUMERICAL.tex}
+\input{Conclude/Conclude.tex}
+\appendices
+\def\thesection{\Alph{section}}%
+\def\thesectiondis{\Alph{section}}%
+\section{Proof of Proposition 1}
+\setcounter{equation}{0}
+\renewcommand{\theequation}{A.\arabic{equation}}
+With the help of \eqref{r_k}, problem \eqref{OP-L2} can be decoupled into a series of minimization problem w.r.t. each user, given as
+\begin{equation}\label{App-1}
+\begin{aligned}
+\min_{\boldsymbol{X}\in\mathcal{X}}~\frac{(p_{k}+\beta_{k})\lambda_{k}R_{k}}{B\sum_{n\in\mathcal{N}}x_{k,n}\log_2\left(1+\frac{p_{k}g_{k,n}}{\sigma_n^2}\right)},~\forall k.
+\end{aligned} 
+\end{equation}
+Obviously, problem \eqref{App-1} can be equivalently rewritten as
+\begin{equation}\label{App-2}
+\begin{aligned}
+\max_{\boldsymbol{X}\in\mathcal{X}}~\frac{B\sum_{n\in\mathcal{N}}x_{k,n}\log_2\left(1+\frac{p_{k}g_{k,n}}{\sigma_n^2}\right)}{(p_{k}+\beta_{k})\lambda_{k}R_{k}},~\forall k,
+\end{aligned} 
+\end{equation}
+therefore, we can obtain the maximization problem \eqref{OP-L3} through summating \eqref{App-2} w.r.t. each user.
+\printbibliography
+\end{document}
