@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 def run_maze():
     observation = [[0]]
     reward_ = []
-    for step in range(200000):
+    for step in range(50000):
         # e = 0
         ########################更改
         # for step in range(5):
@@ -47,9 +47,9 @@ if __name__ == "__main__":
     # maze game
     env = Maze()
     RL = DeepQNetwork(env.n_actions, env.n_features,
-                      learning_rate=0.01,
+                      learning_rate=0.005,
                       reward_decay=0.9,
-                      e_greedy=0.7,
+                      e_greedy=0.6,
                       replace_target_iter=200,
                       memory_size=2000,
                       # output_graph=True
