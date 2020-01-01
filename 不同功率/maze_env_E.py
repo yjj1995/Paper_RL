@@ -50,15 +50,28 @@ class Maze(object):
             elif state_init[action][i] == 2:
                 state[i] = 3000
         R = 0
+        # 功耗
+        E = 0
         # reward
         reward = 0
         for i in range(3):
             R = R + 12.5 * 10 ** 3 * math.log((1 + (state[i] * gh[i]) / (10 ** -13)), 2)
+            # 1.功耗为reward
+        # for i in range(3):
+        #     reward = reward + state[i] * (0.5 * 1.5 * 10 ** 3 / R)
+        # print("功耗为：", reward)
+        # print("选择的功率为", state)
+        # return action, -reward
+            # 2. 以最小的值作为衡量标准
         for i in range(3):
-            reward = reward + state[i] * (0.5 * 1.5 * 10 ** 3 / R)
-        print("功耗为：", reward)
+            E = E + state[i] * (0.5 * 1.5 * 10 ** 3 / R)
+        print("功耗为：", E)
         print("选择的功率为", state)
-        return action, -reward
-
-
+        if E < 1.5:
+            reward = 100
+        elif E < 2 and E > 1.5:
+            reward = 50
+        elif E >= 2:
+            reward = -100
+        return action, reward
 

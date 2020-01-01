@@ -1,5 +1,5 @@
-from 相同功率.maze_env import Maze
-from 相同功率.RL_brain import DeepQNetwork
+from Paper_RL.相同功率.maze_env import Maze
+from Paper_RL.相同功率.RL_brain import DeepQNetwork
 import matplotlib.pyplot as plt
 
 

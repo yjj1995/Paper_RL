@@ -1,13 +1,13 @@
 import matplotlib.pyplot as plt
 
-from Paper_RL.不同功率.RL_brain import DeepQNetwork
-from Paper_RL.不同功率.maze_env import Maze
+from Paper_RL.不同功率.RL_brain_E import DeepQNetwork
+from Paper_RL.不同功率.maze_env_E import Maze
 
 
 def run_maze():
     observation = [[0]]
     reward_ = []
-    for step in range(10000):
+    for step in range(5000):
         # e = 0
         ########################更改
         # for step in range(5):
@@ -48,9 +48,9 @@ if __name__ == "__main__":
     # maze game
     env = Maze()
     RL = DeepQNetwork(env.n_actions, env.n_features,
-                      learning_rate=0.005,
+                      learning_rate=0.01,
                       reward_decay=0.9,
-                      e_greedy=0.6,
+                      e_greedy=0.9,
                       replace_target_iter=200,
                       memory_size=2000,
                       # output_graph=True

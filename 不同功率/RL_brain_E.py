@@ -28,7 +28,7 @@ class DeepQNetwork:
             n_actions,
             n_features,
             learning_rate=0.1,
-            reward_decay=0.9,
+            reward_decay=0.6,
             e_greedy=0.9,
             replace_target_iter=300,
             memory_size=500,
@@ -130,11 +130,11 @@ class DeepQNetwork:
         # 传入回合
         # to have batch dimension when feed into tf placeholder
         # observation = observation[np.newaxis, :]
-        if step < 20000:
-            # self.epsilon = 0.7 + step * 0.00005
-            self.epsilon = 0.6 + step * 0.00002
-        else:
-            self.epsilon = 1
+        # if step < 1000:
+        #     # self.epsilon = 0.7 + step * 0.00005
+        #     self.epsilon = 0.6 + step * 0.00002
+        # else:
+        #     self.epsilon = 1
 
         if np.random.uniform() < self.epsilon:
             # forward feed the observation and get q value for every actions
