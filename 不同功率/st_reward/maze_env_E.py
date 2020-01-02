@@ -67,9 +67,12 @@ class Maze(object):
             E = E + state[i] * (0.5 * 1.5 * 10 ** 3 / R)
         print("功耗为：", E)
         print("选择的功率为", state)
-        if E < 1.5:
-            reward = 100
-        elif E >= 1.5:
-            reward = -100
+        # if E < 1.2:
+        #     reward = 100
+        # elif E == 1.2:
+        #     reward = 0
+        # elif E > 1.2:
+        #     reward = -100
+        reward = -((E-1.2)*10)
         return action, reward
 

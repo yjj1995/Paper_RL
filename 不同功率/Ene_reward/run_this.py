@@ -7,7 +7,7 @@ from Paper_RL.不同功率.Ene_reward.maze_env import Maze
 def run_maze():
     observation = [[0]]
     reward_ = []
-    for step in range(10000):
+    for step in range(50000):
         # e = 0
         ########################更改
         # for step in range(5):

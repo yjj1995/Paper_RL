@@ -7,7 +7,7 @@ from Paper_RL.不同功率.st_reward.maze_env_E import Maze
 def run_maze():
     observation = [[0]]
     reward_ = []
-    for step in range(5000):
+    for step in range(10000):
         # e = 0
         ########################更改
         # for step in range(5):
@@ -48,9 +48,9 @@ if __name__ == "__main__":
     # maze game
     env = Maze()
     RL = DeepQNetwork(env.n_actions, env.n_features,
-                      learning_rate=0.01,
+                      learning_rate=0.1,
                       reward_decay=0.9,
-                      e_greedy=0.9,
+                      e_greedy=0.7,
                       replace_target_iter=200,
                       memory_size=2000,
                       # output_graph=True
