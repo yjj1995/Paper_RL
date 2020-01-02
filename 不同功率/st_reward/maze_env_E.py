@@ -69,9 +69,7 @@ class Maze(object):
         print("选择的功率为", state)
         if E < 1.5:
             reward = 100
-        elif E < 2 and E > 1.5:
-            reward = 50
-        elif E >= 2:
+        elif E >= 1.5:
             reward = -100
         return action, reward
 

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
-from Paper_RL.不同功率.RL_brain import DeepQNetwork
-from Paper_RL.不同功率.maze_env import Maze
+from Paper_RL.不同功率.Ene_reward.RL_brain import DeepQNetwork
+from Paper_RL.不同功率.Ene_reward.maze_env import Maze
 
 
 def run_maze():
