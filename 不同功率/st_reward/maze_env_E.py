@@ -62,7 +62,7 @@ class Maze(object):
         # print("功耗为：", reward)
         # print("选择的功率为", state)
         # return action, -reward
-            # 2. 以最小的值作为衡量标准
+        # 2. 以最小的值作为衡量标准
         for i in range(3):
             E = E + state[i] * (0.5 * 1.5 * 10 ** 3 / R)
         print("功耗为：", E)
@@ -73,6 +73,5 @@ class Maze(object):
         #     reward = 0
         # elif E > 1.2:
         #     reward = -100
-        reward = -((E-1.2)*10)
+        reward = -((E - 1.2) * 10)
         return action, reward
-

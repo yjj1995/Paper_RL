@@ -37,8 +37,8 @@ def run_maze():
         # break while loop when end of this episode
         # e = e + e1
         # print("第", episode, '回合的第', step+1, '步')
-    #     E.append(e)
-    # print(E)
+        #     E.append(e)
+        # print(E)
         print('第', step, '步')
     plt.plot(reward_)
     plt.show()
