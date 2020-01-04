@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 from Paper_RL.User_Power.RL_brain import DeepQNetwork
 from Paper_RL.User_Power.maze_env import Maze
 
@@ -6,6 +7,10 @@ from Paper_RL.User_Power.maze_env import Maze
 def run_maze():
     observation = [[0]]
     E_ = []
+    K = 3
+    # 创建信道矩阵
+    # gh = [[0] * 3 for i in range(3)]
+    gh = np.zeros([3, 3]).tolist()
     for step in range(100000):
         # e = 0
         ########################更改
@@ -23,10 +28,9 @@ def run_maze():
         # 　每20步换一次信道
         #   每个用户的距离不同
         if step % 20 == 0:
-            g_1 = env.Channel_Generate(10)
-            g_2 = env.Channel_Generate(20)
-            g_3 = env.Channel_Generate(30)
-            gh = [g_1, g_2, g_3]
+            for i in range(K):
+                gh[i] = env.Channel_Generate((i + 1) * 10)
+            # 三个用户 每个用户有3个子载波
         observation_, reward, E_all = env.state(action, gh)
         E_.append(E_all)
         # print(observation, action, reward, [[observation_]])
