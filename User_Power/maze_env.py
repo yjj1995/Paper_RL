@@ -24,7 +24,7 @@ class Maze(object):
         self.n_features = 1
 
     # 　信道变化
-    def Channel_Generate(self):
+    def Channel_Generate(self, dis):
         dis = 10
         H = []
         gh = []
@@ -49,14 +49,15 @@ class Maze(object):
                 state[i] = 2000
             elif state_init[action][i] == 2:
                 state[i] = 3000
-        R = 0
+        R = 3 * [0]
         # 功耗
-        E = 0
+        E = 3 * [0]
         # reward
         reward = 0
         # 传输时间
         for i in range(3):
-            R = R + 12.5 * 10 ** 3 * math.log((1 + (state[i] * gh[i]) / (10 ** -13)), 2)
+            for j in range(3):
+                R[i] = R[i] + 12.5 * 10 ** 3 * math.log((1 + (state[i] * gh[i][j]) / (10 ** -13)), 2)
             # 1.功耗为reward
         # for i in range(3):
         #     reward = reward + state[i] * (0.5 * 1.5 * 10 ** 3 / R)
@@ -65,8 +66,9 @@ class Maze(object):
         # return action, -reward
         # 2. 以最小的值作为衡量标准
         for i in range(3):
-            E = E + state[i] * (0.5 * 1.5 * 10 ** 3 / R)
-        print("功耗为：", E)
+            E[i] = E[i] + state[i] * (0.5 * 1.5 * 10 ** 3 / R[i])
+        e = sum(E)
+        print("功耗为：", e)
         print("选择的功率为", state)
         # if E < 1.2:
         #     reward = 100
@@ -75,5 +77,5 @@ class Maze(object):
         # elif E > 1.2:
         #     reward = -100
         # 和 靠近最优的值进行比较
-        reward = -((E - 1.2) * 10)
-        return action, reward
+        reward = -(e-1.2)*10
+        return action, reward, e

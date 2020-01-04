@@ -57,6 +57,7 @@ class Maze(object):
         # 传输时间
         for i in range(3):
             R = R + 12.5 * 10 ** 3 * math.log((1 + (state[i] * gh[i]) / (10 ** -13)), 2)
+        T = 0.5 * 1.5 * 10 ** 3 / R
             # 1.功耗为reward
         # for i in range(3):
         #     reward = reward + state[i] * (0.5 * 1.5 * 10 ** 3 / R)
@@ -67,13 +68,9 @@ class Maze(object):
         for i in range(3):
             E = E + state[i] * (0.5 * 1.5 * 10 ** 3 / R)
         print("功耗为：", E)
+        print("传输的时间为", T)
         print("选择的功率为", state)
-        # if E < 1.2:
-        #     reward = 100
-        # elif E == 1.2:
-        #     reward = 0
-        # elif E > 1.2:
-        #     reward = -100
-        # 和 靠近最优的值进行比较
-        reward = -((E - 1.2) * 10)
-        return action, reward
+        # 200000次
+
+
+        return action, reward, E

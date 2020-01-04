@@ -1,13 +1,12 @@
 import matplotlib.pyplot as plt
-
-from Paper_RL.不同功率.Ene_reward.RL_brain import DeepQNetwork
-from Paper_RL.不同功率.Ene_reward.maze_env import Maze
+from Paper_RL.User_Power.RL_brain import DeepQNetwork
+from Paper_RL.User_Power.maze_env import Maze
 
 
 def run_maze():
     observation = [[0]]
-    reward_ = []
-    for step in range(50000):
+    E_ = []
+    for step in range(100000):
         # e = 0
         ########################更改
         # for step in range(5):
@@ -22,10 +21,14 @@ def run_maze():
         # 传出能量消耗
         # 传入步数和动作和当前状态
         # 　每20步换一次信道
+        #   每个用户的距离不同
         if step % 20 == 0:
-            g = env.Channel_Generate()
-        observation_, reward = env.state(action, g)
-        reward_.append(-reward)
+            g_1 = env.Channel_Generate(10)
+            g_2 = env.Channel_Generate(20)
+            g_3 = env.Channel_Generate(30)
+            gh = [g_1, g_2, g_3]
+        observation_, reward, E_all = env.state(action, gh)
+        E_.append(E_all)
         # print(observation, action, reward, [[observation_]])
         RL.store_transition(observation, action, reward, [[observation_]])
         ###########################12.19##################
@@ -37,10 +40,10 @@ def run_maze():
         # break while loop when end of this episode
         # e = e + e1
         # print("第", episode, '回合的第', step+1, '步')
-    #     E.append(e)
-    # print(E)
+        #     E.append(e)
+        # print(E)
         print('第', step, '步')
-    plt.plot(reward_)
+    plt.plot(E_)
     plt.show()
 
 
@@ -48,7 +51,7 @@ if __name__ == "__main__":
     # maze game
     env = Maze()
     RL = DeepQNetwork(env.n_actions, env.n_features,
-                      learning_rate=0.005,
+                      learning_rate=0.1,
                       reward_decay=0.9,
                       e_greedy=0.6,
                       replace_target_iter=200,
