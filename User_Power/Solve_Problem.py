@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot
 import random
 import math  # 导入 math 模块
-import Paper_RL.User_Power.Channel_Generate
+from Paper_RL.User_Power.Channel_Generate import Channel_Generate
 
 K = 4
 # 用户数
@@ -72,7 +72,7 @@ x = np.zeros([K, N])
 # 初始化每个子载波的相关属性
 for i in range(K):
     for j in range(N):
-        h[i][j] = Paper_RL.User_Power.Channel_Generate.Channel_Generate(1, 1, dis[i])
+        h[i][j] = Channel_Generate(dis[i])
         gh[i][j] = np.linalg.norm(h[i][j])
 # 初始化变量
 print(gh)

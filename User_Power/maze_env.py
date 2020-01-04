@@ -33,7 +33,7 @@ class Maze(object):
         return gh
 
     # def state(self, action, p0, g0):
-    def state(self, action, gh):
+    def state(self, action, gh, Sub):
         state_init = []
         state = 3 * [0]
         for i in range(3):
@@ -55,7 +55,8 @@ class Maze(object):
         reward = 0
         # 传输时间
         for i in range(3):
-            for j in range(3):
+            # for i in range(3): 假设信道全部为3
+            for j in range(Sub[i]):
                 R[i] = R[i] + 12.5 * 10 ** 3 * math.log((1 + (state[i] * gh[i][j]) / (10 ** -13)), 2)
             # 1.功耗为reward
         # for i in range(3):
@@ -70,6 +71,7 @@ class Maze(object):
             print("第", i+1, "个用户的传输功耗为", E[i])
         e = sum(E)
         print("选择的功率为", state)
+        print("总功耗为", e)
         # if E < 1.2:
         #     reward = 100
         # elif E == 1.2:
@@ -77,5 +79,5 @@ class Maze(object):
         # elif E > 1.2:
         #     reward = -100
         # 和 靠近最优的值进行比较
-        reward = -(e - 1.2) * 10
+        reward = -(e - 0.12) * 10
         return action, reward, e
