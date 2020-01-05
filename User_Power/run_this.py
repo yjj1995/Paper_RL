@@ -1,17 +1,19 @@
 import matplotlib.pyplot as plt
 import numpy as np
+
+from Paper_RL.User_Power.Channel_Generate import Channel_Generate
 from Paper_RL.User_Power.RL_brain import DeepQNetwork
 from Paper_RL.User_Power.maze_env import Maze
-from Paper_RL.User_Power.Channel_Generate import Channel_Generate
+
 
 def run_maze():
     observation = [[0]]
     E_ = []
     # 用户使用子载波数量
-    Sub = [20, 30, 50]
+    Sub = [5, 15, 12]
     # 创建信道增益矩阵
     # 方法1. gh = [[0] * 3 for i in range(3)]
-    gh = np.zeros([3, 50]).tolist()
+    gh = np.zeros([3, 15]).tolist()
     for step in range(100000):
         # e = 0
         ########################更改

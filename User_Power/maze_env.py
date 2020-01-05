@@ -79,5 +79,5 @@ class Maze(object):
         # elif E > 1.2:
         #     reward = -100
         # 和 靠近最优的值进行比较
-        reward = -(e - 0.12) * 10
+        reward = -e  * 10
         return action, reward, e
