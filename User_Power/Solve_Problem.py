@@ -4,9 +4,9 @@ import random
 import math  # 导入 math 模块
 from Paper_RL.User_Power.Channel_Generate import Channel_Generate
 
-K = 6
+K = 4
 # 用户数
-N = 32
+N = 64
 # 子载波数
 e = 10 ** -5
 # 对偶因子迭代误差
@@ -35,7 +35,7 @@ F = 10 ** 10
 # R = np.trunc((1500 + 300*(np.random.uniform(0,1,K))))
 # uniform 指定范围 随机
 R = 1500 + 100 * (np.random.uniform(0, 1, K))
-dis = 20 + 5 * (np.random.rand(K))
+dis = 10 + 5 * (np.random.rand(K))
 # dis = K*[10]
 # rand 从0到1之间随机
 # 随机产生距离 20m 之类
@@ -77,6 +77,7 @@ for i in range(K):
     print("第", i, "个用户为:", gh[i])
 # 初始化变量
 lam = K * [0.4]
+print("初始化卸载比例为:", lam)
 # 卸载比例
 fkm = K * [0]
 # 定义分配频率
@@ -89,20 +90,21 @@ z = 0
 a_k_u = K * [0]
 b_k_u = K * [0]
 # 迭代
-while z <= 5:
+while z <= Z:
     # 1.求解fkm 二分法
     for i in range(K):
         fkm_U[i] = F
         fkm_L[i] = 0
         fkm[i] = (1 / 2) * (fkm_U[i] + fkm_L[i])
-        while abs(2 * fkm[i] * k_m * lam[i] * c_k[i] * R[i] - (b_k[i] * c_k[i] * R[i] * lam[i])) / (
-                (fkm[i] * 2) + gam) > rho:
+        # print(abs(2*fkm[i]*k_m*lam[i]*c_k[i]*R[i]-(b_k[i]*c_k[i]*R[i]*lam[i])/((fkm[i])**2) + gam))
+        while abs(2*fkm[i]*k_m*lam[i]*c_k[i]*R[i]-(b_k[i]*c_k[i]*R[i]*lam[i])/((fkm[i])**2) + gam) > rho:
             fkm[i] = (1 / 2) * (fkm_L[i] + fkm_U[i])
             l_k[i] = 2 * fkm[i] * k_m * lam[i] * c_k[i] - (b_k[i] * c_k[i] * R[i] * lam[i]) / ((fkm[i]) ** 2) + gam
             if l_k[i] > 0:
                 fkm_U[i] = fkm[i]
             elif l_k[i] < 0:
                 fkm_L[i] = fkm[i]
+        print(fkm)
 
     ####2 子载波求解
     ln_1 = np.zeros([N, K])
@@ -147,10 +149,12 @@ while z <= 5:
 # 求解卸载比例
 E_lam = K * [0]
 for i in range(K):
-    E_lam[i] = (r[i] * R[i] * c_k[i] * (fkm[i] ** 2) * k_m - ((f_k[i] ** 2) * k) + p_max * R[i]) / r[i]
+    E_lam[i] = (r[i] * R[i] * c_k[i] * ((fkm[i] ** 2) * k_m - (f_k[i] ** 2) * k) + p_max * R[i]) / r[i]
+    # print(E_lam)
     if E_lam[i] > 0:
         if 1 - (T * f_k[i]) / (c_k[i] * R[i]) > 0:
             lam[i] = 1 - (T * f_k[i]) / (c_k[i] * R[i])
+            # print("lam", lam[i])
         else:
             lam[i] = 0
     elif E_lam[i] < 0:
@@ -175,4 +179,4 @@ for i in range(K):
 
 #  总能量为
 E_t = sum(E)
-print(E_t)
+print("能耗为:", E_t)
