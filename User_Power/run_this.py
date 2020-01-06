@@ -14,7 +14,7 @@ def run_maze():
     # 创建信道增益矩阵
     # 方法1. gh = [[0] * 3 for i in range(3)]
     gh = np.zeros([3, 15]).tolist()
-    for step in range(100000):
+    for step in range(150000):
         # e = 0
         ########################更改
         # for step in range(5):

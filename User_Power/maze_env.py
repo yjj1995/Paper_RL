@@ -43,11 +43,11 @@ class Maze(object):
                     # 建立状态二维数组
         for i in range(3):
             if state_init[action][i] == 0:
-                state[i] = 1000
+                state[i] = 0.1
             elif state_init[action][i] == 1:
-                state[i] = 2000
+                state[i] = 0.2
             elif state_init[action][i] == 2:
-                state[i] = 3000
+                state[i] = 0.3
         R = 3 * [0]
         # 功耗
         E = 3 * [0]
@@ -66,9 +66,9 @@ class Maze(object):
         # return action, -reward
         # 2. 以最小的值作为衡量标准
         for i in range(3):
-            E[i] = E[i] + state[i] * (0.5 * 1.5 * 10 ** 3 / R[i])
+            E[i] = E[i] + state[i] * (0.5 * 1.5 * 10 ** 6 / R[i])
         for i in range(3):
-            print("第", i+1, "个用户的传输功耗为", E[i])
+            print("第", i + 1, "个用户的传输功耗为", E[i])
         e = sum(E)
         print("选择的功率为", state)
         print("总功耗为", e)
@@ -79,5 +79,5 @@ class Maze(object):
         # elif E > 1.2:
         #     reward = -100
         # 和 靠近最优的值进行比较
-        reward = -e  * 10
+        reward = -(e - 0.1) *10
         return action, reward, e
