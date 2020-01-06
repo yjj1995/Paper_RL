@@ -23,15 +23,6 @@ class Maze(object):
         self.n_actions = len(self.action_space)
         self.n_features = 1
 
-    # 　信道变化
-    def Channel_Generate(self, dis):
-        H = []
-        gh = []
-        for i in range(3):
-            H.append(2 ** 0.5 / 2 * (np.random.randn(1, 1)) + 1j * (np.random.randn(1, 1)) * dis ** -2)
-            gh.append(np.linalg.norm(H[i]))
-        return gh
-
     # def state(self, action, p0, g0):
     def state(self, action, gh, Sub):
         state_init = []

@@ -4,15 +4,15 @@ import random
 import math  # 导入 math 模块
 from Paper_RL.User_Power.Channel_Generate import Channel_Generate
 
-K = 4
+K = 6
 # 用户数
-N = 16
+N = 32
 # 子载波数
 e = 10 ** -5
 # 对偶因子迭代误差
 Z = 100
 # 迭代次数
-k = 10 ** -26
+k = 10 ** -25
 # 用户k的能耗系数
 k_m = 10 ** -26
 # MEC的能耗系数
@@ -22,7 +22,7 @@ B = 12.5 * (10 ** 3)
 # 带宽 单位w
 p_max = 0.6
 # 用户的最大功率
-T = 9.5 * (10 ** -3)
+T = 9.5 * 10 ** -3
 # 时间延迟
 F = 10 ** 10
 # MEC 总的计算频率，单位为HZ
@@ -34,7 +34,7 @@ F = 10 ** 10
 # 取整
 # R = np.trunc((1500 + 300*(np.random.uniform(0,1,K))))
 # uniform 指定范围 随机
-R = 1500 + 300 * (np.random.uniform(0, 1, K))
+R = 1500 + 100 * (np.random.uniform(0, 1, K))
 dis = 20 + 5 * (np.random.rand(K))
 # dis = K*[10]
 # rand 从0到1之间随机
@@ -43,7 +43,7 @@ dis = 20 + 5 * (np.random.rand(K))
 c_k = 950 + 50 * (np.random.rand(K))
 # 处理一位用户k的一位数据需要多少CPU周期
 
-f_k = (10 ** 9) * (1.0 + 0.1 * (np.random.rand(K)))
+f_k = (10 ** 9) * (0.6 + 0.1 * (np.random.rand(K)))
 # 用户的计算频率
 a_k = []
 b_k = []
@@ -74,9 +74,9 @@ for i in range(K):
     for j in range(N):
         h[i][j] = Channel_Generate(dis[i])
         gh[i][j] = np.linalg.norm(h[i][j])
+    print("第", i, "个用户为:", gh[i])
 # 初始化变量
-print(gh)
-lam = K * [0.5]
+lam = K * [0.4]
 # 卸载比例
 fkm = K * [0]
 # 定义分配频率
@@ -86,8 +86,10 @@ fkm_U = K * [0]
 fkm_L = K * [0]
 l_k = K * [0]
 z = 0
+a_k_u = K * [0]
+b_k_u = K * [0]
 # 迭代
-while z <= 1:
+while z <= 5:
     # 1.求解fkm 二分法
     for i in range(K):
         fkm_U[i] = F
@@ -113,20 +115,21 @@ while z <= 1:
                 ln_1[i, j] = (B * (math.log((1 + p_max * gh[j][i] / g), 2))) * (1 / (lam[j] * R[j] * (p_max + b_k[j])))
         ln_h = ln_1[i].tolist().copy()
         x[ln_h.index(max(ln_h)), i] = 1
+    print("子载波分配矩阵为:", x)
     # 取出子载波矩阵的每一行
     # 判断子载波i 分配给哪个用户
     #  计算卸载用户的传输速度
     r = K * [0]
     for i in range(K):
         for j in range(N):
-            r[i] = r[i] + B * x[i, j] * math.log(1 + p_max * gh[i][j] / g, 2)
+            r[i] = r[i] + B * x[i, j] * math.log(1 + (p_max * gh[i][j] / g), 2)
+    print("传输速率为:", r)
 
     # 对偶乘子更新
     gam_u = gam - (sum(fkm) - F) * 10 ** -18
-    a_k_u = K * [0]
-    b_k_u = K * [0]
     for i in range(K):
-        a_k_u[i] = a_k[i] - (((1 - lam[i]) * R[i] * c_k[i]) / fkm[i] - T) * (10 ** -7)
+        a_k_u[i] = a_k[i] - (((1 - lam[i]) * R[i] * c_k[i]) / fkm[i] - T) * (10 ** -3)
+        b_k_u[i] = b_k[i] - ((lam[i] * R[i]) / r[i] + (lam[i] * R[i] * c_k[i]) / fkm[i] - T) * (10 ** -7)
         if a_k[i] < 0:
             a_k[i] = 0
         elif b_k[i] < 0:
@@ -139,7 +142,7 @@ while z <= 1:
             b_k[i] = b_k_u[i]
 
     z = z + 1
-    print("步数为 :" + str(z))
+    print("步数为 :", z)
 
 # 求解卸载比例
 E_lam = K * [0]
@@ -172,3 +175,4 @@ for i in range(K):
 
 #  总能量为
 E_t = sum(E)
+print(E_t)
