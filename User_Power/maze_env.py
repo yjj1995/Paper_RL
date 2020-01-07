@@ -34,11 +34,11 @@ class Maze(object):
                     # 建立状态二维数组
         for i in range(3):
             if state_init[action][i] == 0:
-                state[i] = 0.1
+                state[i] = 0.6
             elif state_init[action][i] == 1:
-                state[i] = 0.2
+                state[i] = 1.2
             elif state_init[action][i] == 2:
-                state[i] = 0.3
+                state[i] = 1.8
         R = 3 * [0]
         # 功耗
         E = 3 * [0]

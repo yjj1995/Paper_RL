@@ -4,12 +4,14 @@ import numpy as np
 from Paper_RL.User_Power.Channel_Generate import Channel_Generate
 from Paper_RL.User_Power.RL_brain import DeepQNetwork
 from Paper_RL.User_Power.maze_env import Maze
+from Paper_RL.User_Power.Ag_solve import Ag_solve
 
 
 def run_maze():
     observation = [[0]]
     E_ = []
-    # 用户使用子载波数量
+    # 用户使用子载波情况
+    gh = Ag_solve.solve()
     Sub = [5, 15, 12]
     # 创建信道增益矩阵
     # 方法1. gh = [[0] * 3 for i in range(3)]
@@ -60,6 +62,7 @@ def run_maze():
 
 if __name__ == "__main__":
     # maze game
+    Ag = Ag_solve(4, 32)
     env = Maze()
     RL = DeepQNetwork(env.n_actions, env.n_features,
                       learning_rate=0.01,
