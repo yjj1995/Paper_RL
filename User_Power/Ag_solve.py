@@ -7,12 +7,8 @@ from Paper_RL.User_Power.Channel_Generate import Channel_Generate
 
 class Ag_solve(object):
     def __init__(self, K_In, N_In):
-        self.K = K_In
-        self.N = N_In
-
-    def solve(self):
-        K = self.K
-        N = self.N
+        K = K_In
+        N = N_In
         e = 10 ** -5
         # 对偶因子迭代误差
         Z = 100

@@ -11,6 +11,8 @@ def run_maze():
     observation = [[0]]
     E_ = []
     # 用户使用子载波情况
+
+    print(x)
     Sub = [5, 15, 12]
     # 创建信道增益矩阵
     # 方法1. gh = [[0] * 3 for i in range(3)]
@@ -61,6 +63,8 @@ def run_maze():
 
 if __name__ == "__main__":
     # maze game
+    AG = Ag_solve(3, 32)
+    gh, lam, x, B, R = AG.__init__()
     env = Maze()
     RL = DeepQNetwork(env.n_actions, env.n_features,
                       learning_rate=0.01,
