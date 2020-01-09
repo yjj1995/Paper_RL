@@ -16,7 +16,14 @@ def run_maze():
     print("**************************")
     print("**************************")
     print("数学求解的子载波分配矩阵为", x)
-    Sub = [5, 15, 12]
+    sub = len(x)*[0]
+    gh = [[]]
+    for i in range(len(x)):
+        sub[i] = int(sum(x[i]))
+        # 输出子载波矩阵
+        for j in range(len(x[i])):
+            if x[i][j] == 1:
+                gh[]
     # 创建信道增益矩阵
     # 方法1. gh = [[0] * 3 for i in range(3)]
     gh = np.zeros([3, 15]).tolist()
