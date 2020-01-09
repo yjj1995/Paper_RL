@@ -77,10 +77,8 @@ class Ag_solve(object):
             for j in range(N):
                 h[i][j] = Channel_Generate(dis[i])
                 gh[i][j] = np.linalg.norm(h[i][j])
-            print("第", i, "个用户为:", gh[i])
         # 初始化变量
         lam = K * [0.4]
-        print("初始化卸载比例为:", lam)
         # 卸载比例
         fkm = K * [0]
         # 定义分配频率
@@ -109,7 +107,6 @@ class Ag_solve(object):
                         fkm_U[i] = fkm[i]
                     elif l_k[i] < 0:
                         fkm_L[i] = fkm[i]
-                print(fkm)
 
             ####2 子载波求解
             ln_1 = np.zeros([N, K])
@@ -123,7 +120,6 @@ class Ag_solve(object):
                                 1 / (lam[j] * R[j] * (p_max + b_k[j])))
                 ln_h = ln_1[i].tolist().copy()
                 x[ln_h.index(max(ln_h)), i] = 1
-            print("子载波分配矩阵为:", x)
             # 取出子载波矩阵的每一行
             # 判断子载波i 分配给哪个用户
             #  计算卸载用户的传输速度
@@ -131,7 +127,6 @@ class Ag_solve(object):
             for i in range(K):
                 for j in range(N):
                     r[i] = r[i] + B * x[i, j] * math.log(1 + (p_max * gh[i][j] / g), 2)
-            print("传输速率为:", r)
 
             # 对偶乘子更新
             gam_u = gam - (sum(fkm) - F) * 10 ** -18
