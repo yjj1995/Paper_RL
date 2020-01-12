@@ -131,14 +131,14 @@ class DeepQNetwork:
         # to have batch dimension when feed into tf placeholder
         # observation = observation[np.newaxis, :]
         if 0 < step <= 2000:
+            # self.epsilon = 0.7 + step * 0.0000001
             self.epsilon = 0.7 + step * 0.0000001
-        #     self.epsilon = 0.7 + step * 0.0000001
-        # elif 2000 < step <= 4000:
-        #     self.epsilon = 0.9 + step * 0.0000001
-        # elif 4000 < step <= 6000:
-        #     self.epsilon = 0.99 + step * 0.0000001
-        # elif 6000 < step <= 8000:
-        #     self.epsilon = 0.999 + step * 0.0000001
+        elif 2000 < step <= 4000:
+            self.epsilon = 0.9 + step * 0.0000001
+        elif 4000 < step <= 6000:
+            self.epsilon = 0.99 + step * 0.0000001
+        elif 6000 < step <= 8000:
+            self.epsilon = 0.999 + step * 0.0000001
         else:
             self.epsilon = 1
 

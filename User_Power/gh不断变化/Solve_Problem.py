@@ -35,7 +35,7 @@ F = 10 ** 10
 # R = np.trunc((1500 + 300*(np.random.uniform(0,1,K))))
 # uniform 指定范围 随机
 R = 1500 + 100 * (np.random.uniform(0, 1, K))
-dis = 10 + 5 * (np.random.rand(K))
+dis = 10 + 10 * (np.random.rand(K))
 # dis = K*[10]
 # rand 从0到1之间随机
 # 随机产生距离 20m 之类
