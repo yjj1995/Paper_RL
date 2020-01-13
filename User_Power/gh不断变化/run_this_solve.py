@@ -10,8 +10,10 @@ from Paper_RL.User_Power.gh不断变化.Ag_solve import Ag_solve
 def run_maze():
     observation = [[0]]
     E_ = []
+    e_ran = []
     # 用户使用子载波情况
-    dis, lam, x, B, R = AG.Solve()
+    dis, lam, x, B, R, K = AG.Solve()
+    print("卸载比例为:", lam)
     print("**************************")
     print("**************************")
     print("**************************")
@@ -47,8 +49,9 @@ def run_maze():
         # 　每20步换一次信道
         #   每个用户的距离不同
         # 传入子载波数量
-        observation_, reward, E_all = env.state(action, gh, sub, lam, B, R)
+        observation_, reward, E_all, E_ran = env.state(action, gh, sub, lam, B, R, K)
         E_.append(E_all)
+        e_ran.append(E_ran)
         # print(observation, action, reward, [[observation_]])
         RL.store_transition(observation, action, reward, [[observation_]])
         ###########################12.19##################
@@ -64,6 +67,7 @@ def run_maze():
         # print(E)
         print('第', step, '步')
     plt.plot(E_)
+    plt.plot(e_ran)
     plt.show()
 
 

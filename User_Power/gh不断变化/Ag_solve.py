@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot
 import random
 import math  # 导入 math 模块
-from Paper_RL.User_Power.Channel_Generate import Channel_Generate
+from Paper_RL.User_Power.gh不断变化.Channel_Generate import Channel_Generate
 
 
 class Ag_solve(object):
@@ -15,7 +15,7 @@ class Ag_solve(object):
         N = self.N1
         e = 10 ** -5
         # 对偶因子迭代误差
-        Z = 100
+        Z = 500
         # 迭代次数
         k = 10 ** -25
         # 用户k的能耗系数
@@ -25,9 +25,9 @@ class Ag_solve(object):
         # segma**2 单位w
         B = 12.5 * (10 ** 3)
         # 带宽 单位w
-        p_max = 0.6
+        p_max = 1.0
         # 用户的最大功率
-        T = 9.5 * 10 ** -3
+        T = 9.5
         # 时间延迟
         F = 10 ** 10
         # MEC 总的计算频率，单位为HZ
@@ -39,14 +39,14 @@ class Ag_solve(object):
         # 取整
         # R = np.trunc((1500 + 300*(np.random.uniform(0,1,K))))
         # uniform 指定范围 随机
-        R = 1500 + 100 * (np.random.uniform(0, 1, K))
-        dis = 10 + 5 * (np.random.rand(K))
+        R = 1500000 + 100000 * (np.random.uniform(0, 1, K))
+        dis = 10 + 10 * (np.random.rand(K))
         print("距离为: ", dis)
         # dis = K*[10]
         # rand 从0到1之间随机
         # 随机产生距离 20m 之类
 
-        c_k = 950 + 50 * (np.random.rand(K))
+        c_k = 1000 + 50 * (np.random.rand(K))
         # 处理一位用户k的一位数据需要多少CPU周期
 
         f_k = (10 ** 9) * (0.6 + 0.1 * (np.random.rand(K)))
@@ -166,4 +166,4 @@ class Ag_solve(object):
                 else:
                     lam[i] = 1
             # 返回 信道，和 分配情况， 数据量， 卸载比例
-            return dis, lam, x, B, R
+            return dis, lam, x, B, R, K
