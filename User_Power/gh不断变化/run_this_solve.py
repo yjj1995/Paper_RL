@@ -14,9 +14,6 @@ def run_maze():
     # 用户使用子载波情况
     dis, lam, x, B, R, K = AG.Solve
     print("卸载比例为:", lam)
-    print("**************************")
-    print("**************************")
-    print("**************************")
     print("数学求解的子载波分配矩阵为", x)
     sub = len(x) * [0]
     for i in range(3):
