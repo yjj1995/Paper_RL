@@ -10,12 +10,15 @@ class Ag_solve(object):
         self.K1 = K_In
         self.N1 = N_In
 
+    @property
     def Solve(self):
         K = self.K1
+        # 用户数
         N = self.N1
+        # 子载波数
         e = 10 ** -5
         # 对偶因子迭代误差
-        Z = 500
+        Z = 100
         # 迭代次数
         k = 10 ** -25
         # 用户k的能耗系数
@@ -25,9 +28,9 @@ class Ag_solve(object):
         # segma**2 单位w
         B = 12.5 * (10 ** 3)
         # 带宽 单位w
-        p_max = 1.0
+        p_max = 0.6
         # 用户的最大功率
-        T = 9.5
+        T = 9.5 * 10 ** -3
         # 时间延迟
         F = 10 ** 10
         # MEC 总的计算频率，单位为HZ
@@ -39,14 +42,16 @@ class Ag_solve(object):
         # 取整
         # R = np.trunc((1500 + 300*(np.random.uniform(0,1,K))))
         # uniform 指定范围 随机
-        R = 1500000 + 100000 * (np.random.uniform(0, 1, K))
-        dis = 10 + 10 * (np.random.rand(K))
-        print("距离为: ", dis)
+
+        # R = 1500 + 100 * (np.random.uniform(0, 1, K))
+
+        R = [1500, 1500, 1500]
         # dis = K*[10]
+        dis = 10 + 5 * (np.random.rand(K))
         # rand 从0到1之间随机
         # 随机产生距离 20m 之类
 
-        c_k = 1000 + 50 * (np.random.rand(K))
+        c_k = 950 + 50 * (np.random.rand(K))
         # 处理一位用户k的一位数据需要多少CPU周期
 
         f_k = (10 ** 9) * (0.6 + 0.1 * (np.random.rand(K)))
@@ -55,8 +60,8 @@ class Ag_solve(object):
         b_k = []
         q = 2
         for i in range(K):
-            a_k.append((10 ** (-q)) * random.random() + (10 ** (-q)))
             b_k.append((10 ** (-q)) * random.random() + (10 ** (-q)))
+            a_k.append((10 ** (-q)) * random.random() + (10 ** (-q)))
             pass
 
         gam = 10 ** -q
@@ -81,6 +86,7 @@ class Ag_solve(object):
                 gh[i][j] = np.linalg.norm(h[i][j])
         # 初始化变量
         lam = K * [0.4]
+        print("初始化卸载比例为:", lam)
         # 卸载比例
         fkm = K * [0]
         # 定义分配频率
@@ -109,6 +115,7 @@ class Ag_solve(object):
                         fkm_U[i] = fkm[i]
                     elif l_k[i] < 0:
                         fkm_L[i] = fkm[i]
+                # print(fkm)
 
             ####2 子载波求解
             ln_1 = np.zeros([N, K])
@@ -129,6 +136,7 @@ class Ag_solve(object):
             for i in range(K):
                 for j in range(N):
                     r[i] = r[i] + B * x[i, j] * math.log(1 + (p_max * gh[i][j] / g), 2)
+            # print("传输速率为:", r)
 
             # 对偶乘子更新
             gam_u = gam - (sum(fkm) - F) * 10 ** -18
@@ -165,5 +173,4 @@ class Ag_solve(object):
                     lam[i] = (T * r[i] * fkm[i]) / (R[i] * fkm[i] + r[i] * R[i] * c_k[i])
                 else:
                     lam[i] = 1
-            # 返回 信道，和 分配情况， 数据量， 卸载比例
-            return dis, lam, x, B, R, K
+        return dis, lam, x, B, R, K

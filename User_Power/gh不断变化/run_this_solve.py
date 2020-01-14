@@ -12,7 +12,7 @@ def run_maze():
     E_ = []
     e_ran = []
     # 用户使用子载波情况
-    dis, lam, x, B, R, K = AG.Solve()
+    dis, lam, x, B, R, K = AG.Solve
     print("卸载比例为:", lam)
     print("**************************")
     print("**************************")
@@ -25,7 +25,7 @@ def run_maze():
 
     # 创建信道增益矩阵
     # 方法1. gh = [[0] * 3 for i in range(3)]
-    for step in range(10000):
+    for step in range(20000):
         # e = 0
         #####更改#####
         # for step in range(5):

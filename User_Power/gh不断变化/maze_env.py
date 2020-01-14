@@ -18,7 +18,8 @@ from random import choice
 
 class Maze(object):
     def __init__(self):
-        self.action_space = [i for i in range(27)]
+        # 动作空间
+        self.action_space = [i for i in range(64)]
         print(self.action_space)
         # 构建动作空间
         self.n_actions = len(self.action_space)
@@ -37,6 +38,8 @@ class Maze(object):
                 for k in range(4):
                     # 每个用户一个for
                     state_init.append([i, j, k])
+                    # 64种状态可能
+                    # 64 * 3 的 矩阵
                     # 建立状态二维数组
         for i in range(K):
             if state_init[action][i] == 0:
@@ -68,6 +71,7 @@ class Maze(object):
         for i in range(K):
             print("第", i + 1, "个用户的传输功耗为", E[i])
         e = sum(E)
+        e_ = e * 10000
         print("选择的功率为", state)
         print("总传输功耗为", e)
         # if E < 1.2:
@@ -77,7 +81,7 @@ class Maze(object):
         # elif E > 1.2:
         #     reward = -100
         # 和 靠近最优的值进行比较
-        reward = -(e - 0.2) * 100
+        reward = -(e_ - 5) * 100
         #  随机选择传输功率：
         P = [0.9]
         p_ran = K * [0]
